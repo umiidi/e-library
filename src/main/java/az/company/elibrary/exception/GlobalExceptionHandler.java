@@ -1,7 +1,9 @@
 package az.company.elibrary.exception;
 
 import az.company.elibrary.exception.response.ErrorResponse;
+import az.company.elibrary.exception.type.AccountInvalidException;
 import az.company.elibrary.exception.type.NotFoundException;
+import az.company.elibrary.exception.type.RefreshTokenExpiredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,66 +25,65 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        var error = new ErrorResponse(
-                UUID.randomUUID(),
-                HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        var error = new ErrorResponse(
-                UUID.randomUUID(),
-                HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenExpiredException(RefreshTokenExpiredException ex) {
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(AccountInvalidException.class)
+    public ResponseEntity<ErrorResponse> handleAccountInvalidException(AccountInvalidException ex) {
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        String errorMessage = String.format("The parameter '%s' with value '%s' could not be converted to type '%s'.",
+        String message = String.format("The parameter '%s' with value '%s' could not be converted to type '%s'.",
                 ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
-        var error = new ErrorResponse(
-                UUID.randomUUID(),
-                HttpStatus.BAD_REQUEST,
-                errorMessage,
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
-        var error = new ErrorResponse(
-                UUID.randomUUID(),
-                HttpStatus.BAD_REQUEST,
-                String.format("The required parameter '%s' is missing.", ex.getParameterName()),
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        String message = String.format("The required parameter '%s' is missing.", ex.getParameterName());
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        var error = new ErrorResponse(
-                UUID.randomUUID(),
-                HttpStatus.BAD_REQUEST,
-                "Invalid request body. Please check your input.",
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        String message = "Invalid request body. Please check your input.";
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errors = e.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        var error = new ErrorResponse(
+
+        ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    private ErrorResponse buildErrorResponse(HttpStatus status, Object message) {
+        return new ErrorResponse(
                 UUID.randomUUID(),
-                HttpStatus.BAD_REQUEST,
-                errors,
+                status,
+                message,
                 LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 }

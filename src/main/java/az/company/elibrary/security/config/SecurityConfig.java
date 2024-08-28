@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers(PUBLIC_URLS).permitAll()
 
                                 //auth
+                                .requestMatchers("/auth/logout").authenticated()
                                 .requestMatchers("/auth/**").anonymous()
 
                                 //users

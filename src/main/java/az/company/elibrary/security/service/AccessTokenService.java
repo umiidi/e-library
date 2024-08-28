@@ -9,9 +9,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Instant;
@@ -20,9 +20,9 @@ import java.util.Map;
 
 import static az.company.elibrary.security.filter.AuthFilter.AUTHORITIES_CLAIM;
 
-@Configuration
+@Service
 @RequiredArgsConstructor
-public class JwtService {
+public class AccessTokenService implements TokenCreator<Authentication>, TokenReader<Claims> {
 
     private final SecurityProperties securityProperties;
 
@@ -34,26 +34,28 @@ public class JwtService {
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Claims parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public String issueToken(Authentication authentication) {
+    @Override
+    public String create(Authentication authentication) {
         final JwtBuilder jwtBuilder = Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now()
-                        .plusSeconds(securityProperties.getJwtProperties().getTokenValidityInSeconds())))
+                        .plusSeconds(securityProperties.getJwtProperties().getAccessTokenValidityInSeconds())))
                 .signWith(key, SignatureAlgorithm.HS256);
         jwtBuilder.addClaims(Map.of(
                 AUTHORITIES_CLAIM,
                 authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority).toList()));
         return jwtBuilder.compact();
+    }
+
+    @Override
+    public Claims read(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }

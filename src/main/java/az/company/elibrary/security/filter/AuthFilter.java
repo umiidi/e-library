@@ -1,7 +1,8 @@
 package az.company.elibrary.security.filter;
 
 import az.company.elibrary.models.entity.User;
-import az.company.elibrary.security.service.JwtService;
+import az.company.elibrary.security.service.AccessTokenService;
+import az.company.elibrary.service.getter.CommonGetterService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -15,25 +16,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.rmi.UnexpectedException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class AuthFilter extends OncePerRequestFilter {
-
-    private final JwtService jwtService;
+public class    AuthFilter extends OncePerRequestFilter {
 
     public static final String AUTHORITIES_CLAIM = "authorities";
     public static final String BEARER = "Bearer ";
+
+    private final AccessTokenService accessTokenService;
+    private final CommonGetterService getterService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -51,7 +51,7 @@ public class AuthFilter extends OncePerRequestFilter {
         final Claims claims;
 
         try {
-            claims = jwtService.parseToken(token.get());
+            claims = accessTokenService.read(token.get());
         } catch (JwtException e) {
             return Optional.empty();
         } catch (Exception e) {
@@ -64,8 +64,10 @@ public class AuthFilter extends OncePerRequestFilter {
                 .map(a -> new SimpleGrantedAuthority(a.toString()))
                 .toList();
 
+        String email = claims.getSubject();
+        User user = getterService.getUser(email);
         final UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(claims.getSubject(), "", userAuthorities);
+                new UsernamePasswordAuthenticationToken(user, "", userAuthorities);
         return Optional.of(authenticationToken);
     }
 

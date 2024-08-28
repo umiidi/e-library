@@ -17,8 +17,6 @@ public class ELibraryApplication implements CommandLineRunner {
 
     /*
     todo:
-        implement refresh token
-        refresh and access token storage redis cache
         fix check availability reservation feature
         implement filter book feature
     */
