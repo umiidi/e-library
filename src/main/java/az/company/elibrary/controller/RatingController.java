@@ -6,6 +6,7 @@ import az.company.elibrary.service.rating.RatingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class RatingController {
     }
 
     @DeleteMapping("/{ratingId}")
+    @PreAuthorize("@ratingAuthorizationService.canDelete(#ratingId)")
     public ResponseEntity<Void> deleteRating(@PathVariable Long ratingId) {
         ratingService.deleteRating(ratingId);
         return ResponseEntity.noContent().build();

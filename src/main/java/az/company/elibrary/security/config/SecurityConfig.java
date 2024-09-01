@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +21,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private static final String[] PUBLIC_URLS = {"/error", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
@@ -40,6 +42,10 @@ public class SecurityConfig {
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request ->
                         request
+                                /*
+                                    Some methods are overridden with 'method security'
+                                 */
+
                                 // swagger ui
                                 .requestMatchers(PUBLIC_URLS).permitAll()
 
@@ -48,8 +54,6 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").anonymous()
 
                                 //users
-                                //todo: implemented access method
-
                                 .requestMatchers(HttpMethod.GET, "/users/{id}").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/users/email/{email}").hasAnyRole(ROLE_ADMIN, ROLE_SUPER_ADMIN)
                                 .requestMatchers(HttpMethod.GET, "/users/search").authenticated()

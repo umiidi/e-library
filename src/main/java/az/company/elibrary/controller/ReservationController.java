@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ public class ReservationController {
     }
 
     @GetMapping("/{reservationId}")
+    @PreAuthorize("@reservationAuthorizationService.canViewDetails(#reservationId)")
     public ResponseEntity<ReservationResponse> getReservationDetails(@PathVariable Long reservationId) {
         return ResponseEntity.ok(reservationService.getReservationDetails(reservationId));
     }
@@ -53,6 +55,7 @@ public class ReservationController {
     }
 
     @PatchMapping("/{reservationId}/cancel")
+    @PreAuthorize("@reservationAuthorizationService.canCancelReservation(#reservationId)")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long reservationId) {
         reservationService.cancelReservation(reservationId);
         return ResponseEntity.noContent().build();
