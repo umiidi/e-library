@@ -94,6 +94,14 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/borrowings/me").authenticated()
                                 .requestMatchers("/borrowings/**").hasAnyRole(ROLE_ADMIN, ROLE_SUPER_ADMIN)
 
+                                //categories
+                                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+                                .requestMatchers("categories/**").hasAnyRole(ROLE_ADMIN, ROLE_SUPER_ADMIN)
+
+                                //genres
+                                .requestMatchers(HttpMethod.GET, "/genres/**").permitAll()
+                                .requestMatchers("genres/**").hasAnyRole(ROLE_ADMIN, ROLE_SUPER_ADMIN)
+
                                 .anyRequest().denyAll()
                 );
         return http.build();
