@@ -1,15 +1,10 @@
 package az.company.elibrary.controller;
 
-import az.company.elibrary.models.request.BookRequest;
 import az.company.elibrary.models.request.CategoryRequest;
-import az.company.elibrary.models.response.BookResponse;
 import az.company.elibrary.models.response.CategoryResponse;
 import az.company.elibrary.service.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
