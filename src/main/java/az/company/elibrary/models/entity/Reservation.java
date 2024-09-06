@@ -21,7 +21,7 @@ public class Reservation {
     @Column(nullable = false)
     private Long userId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "book_id")
     private Book book;
 
