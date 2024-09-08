@@ -11,21 +11,9 @@
 			"item": [
 				{
 					"name": "get book by id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n//   \"category\": \"string\",\r\n  \"minPublishedYear\": 0,\r\n  \"maxPublishedYear\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{base_url}}/books/1",
 							"host": [
@@ -45,7 +33,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/books/search?keyword=kitab",
+							"raw": "{{base_url}}/books/search?keyword=war",
 							"host": [
 								"{{base_url}}"
 							],
@@ -56,7 +44,7 @@
 							"query": [
 								{
 									"key": "keyword",
-									"value": "kitab"
+									"value": "war"
 								}
 							]
 						}
@@ -65,29 +53,72 @@
 				},
 				{
 					"name": "filter books",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n//   \"category\": \"string\",\r\n  \"minPublishedYear\": 0,\r\n  \"maxPublishedYear\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{base_url}}/books/filter",
+							"raw": "{{base_url}}/books/filter?page=0&size=5",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"books",
 								"filter"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sortBy",
+									"value": "AVERAGE_RATING",
+									"disabled": true
+								},
+								{
+									"key": "publisher",
+									"value": "books",
+									"disabled": true
+								},
+								{
+									"key": "minPublishedYear",
+									"value": "2010",
+									"disabled": true
+								},
+								{
+									"key": "maxPublishedYear",
+									"value": "2018",
+									"disabled": true
+								},
+								{
+									"key": "minRating",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "maxRating",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "categoriesId",
+									"value": "1, 2",
+									"disabled": true
+								},
+								{
+									"key": "genresId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "language",
+									"value": "AZ",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -99,12 +130,22 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/books",
+							"raw": "{{base_url}}/books?page=0&size=5",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"books"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
 							]
 						}
 					},
@@ -286,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "// { // user\r\n//   \"email\": \"test2@gmail.com\",\r\n//   \"password\": \"test123\"\r\n// }\r\n\r\n{ // admin\r\n  \"email\": \"test1@gmail.com\",\r\n  \"password\": \"test123\"\r\n}\r\n\r\n// { // super admin\r\n//   \"email\": \"umiidi@gmail.com\",\r\n//   \"password\": \"12345\"\r\n// }",
+							"raw": "// { // user\r\n//   \"email\": \"test2@gmail.com\",\r\n//   \"password\": \"test123\"\r\n// }\r\n\r\n// { // admin\r\n//   \"email\": \"test1@gmail.com\",\r\n//   \"password\": \"test123\"\r\n// }\r\n\r\n{ // super admin\r\n  \"email\": \"super-admin@e-library.az\",\r\n  \"password\": \"12345\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1077,13 +1118,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/ratings/2",
+							"raw": "{{base_url}}/ratings/15",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"ratings",
-								"2"
+								"15"
 							]
 						}
 					},
@@ -1671,6 +1712,288 @@
 								"borrowings",
 								"5",
 								"change-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Fiction\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Philosophy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "genre",
+			"item": [
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/genres/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"genres",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/genres",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Biographies\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/genres",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"genres"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"History\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/genres/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"genres",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "genres",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/genres/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"genres",
+								"3"
 							]
 						}
 					},

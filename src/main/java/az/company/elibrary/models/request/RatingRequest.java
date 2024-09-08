@@ -5,14 +5,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import static az.company.elibrary.models.constants.BookConstants.MAX_RATING;
+import static az.company.elibrary.models.constants.BookConstants.MIN_RATING;
+
 @Data
 public class RatingRequest {
 
     @NotNull
     Long bookId;
 
-    @Min(0)
-    @Max(5)
+    @Min(MIN_RATING)
+    @Max(MAX_RATING)
     int rating;
 
 }

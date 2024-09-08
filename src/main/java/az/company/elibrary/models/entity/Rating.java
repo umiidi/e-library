@@ -2,6 +2,7 @@ package az.company.elibrary.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Getter
@@ -12,6 +13,7 @@ import lombok.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "book_id"})
 })
+@FieldNameConstants
 public class Rating {
 
     @Id

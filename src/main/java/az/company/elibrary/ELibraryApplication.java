@@ -18,7 +18,6 @@ public class ELibraryApplication implements CommandLineRunner {
     /*
     todo:
         fix check availability reservation feature
-        implement filter book feature
     */
 
     public ELibraryApplication(UserRepository userRepository, PasswordService passwordService) {

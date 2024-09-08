@@ -2,8 +2,9 @@ package az.company.elibrary.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -11,6 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldNameConstants
 public class Book {
 
     @Id
@@ -18,6 +20,8 @@ public class Book {
     private Long id;
 
     private String title;
+
+    private String description;
 
     @ManyToOne
     private Author author;
@@ -30,16 +34,24 @@ public class Book {
 
     private int inventory;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private Set<Rating> ratings;
+    private String language;
+
+    @ManyToOne
+    private Category category;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Genre> genres;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private Set<Review> reviews;
+    private List<Rating> ratings;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private Set<Reservation> reservations;
+    private List<Review> reviews;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private Set<Borrowing> borrowings;
+    private List<Reservation> reservations;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Borrowing> borrowings;
 
 }

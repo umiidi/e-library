@@ -72,7 +72,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<BookResponse> getBooksByAuthor(Long authorId) {
-        Author author = getterService.getAuthor(authorId); // check
+        Author author = getterService.getAuthor(authorId); // Check if the author exists before retrieving books
         return bookRepository.findByAuthorId(author.getId()).stream()
                 .map(BOOK_MAPPER::mapToBookResponse)
                 .toList();
