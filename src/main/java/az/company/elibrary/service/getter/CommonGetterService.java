@@ -23,6 +23,8 @@ public class CommonGetterService {
     private final ReservationRepository reservationRepository;
     private final RatingRepository ratingRepository;
     private final ReviewRepository reviewRepository;
+    private final CategoryRepository categoryRepository;
+    private final GenreRepository genreRepository;
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,6 +62,14 @@ public class CommonGetterService {
 
     public Review getReview(Long id) {
         return findById(reviewRepository, id, "Review");
+    }
+
+    public Category getCategory(Long id) {
+        return findById(categoryRepository, id, "Category");
+    }
+
+    public Genre getGenre(Long id) {
+        return findById(genreRepository, id, "Genre");
     }
 
     private <T> T findById(JpaRepository<T, Long> repository, Long id, String entityName) {
