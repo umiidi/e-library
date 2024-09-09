@@ -53,10 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Boolean checkAvailability(Long bookId, LocalDate startDate, LocalDate endDate) {
-        Book book = getterService.getBook(bookId);
-
-        //todo: check availability
-        return true;
+        return reservationRepository.isSuitableForReservation(bookId, startDate, endDate);
     }
 
     @Override
